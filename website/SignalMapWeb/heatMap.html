@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+
+		<title>Signal Map</title>
+
+		<link rel="sttylesheet" href="css/style.css" />
+
+		<!--	<script type="text/javascript"
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8_kl95wUFONInILqN4Zl67XmVnGCc5MA&libraries=visualization&sensor=true"></script>
+		-->
+
+		<script type="text/javascript"
+		src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+
+		<script type="text/javascript" src="http://www.heatmapapi.com/Javascript/HeatmapAPIGoogle3.js"></script>
+		<script type="text/javascript" src="http://www.heatmapapi.com/Javascript/HeatMapAPI3.aspx?k=f2e0d9db-29e1-4221-a1a2-c39a0200414f"></script>
+
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+
+		<script type="text/javascript" src="js/main.js"></script>
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+
+			});
+
+		</script>
+
+		<script type="text/javascript">
+			var myHeatmap = new GEOHeatmap();
+			var myData = null;
+			$(function() {
+				// create data
+				myData = new Array();
+				for ( p = 0; p < 50; p++) {
+					var rLatD = Math.floor(Math.random() * 1000);
+					var rLonD = Math.floor(Math.random() * 1000);
+					var rValD = Math.floor(Math.random() * 10);
+
+					myData.push(38.47 + (rLatD / 15000));
+					myData.push(-121.84 + (rLonD / 15000));
+					myData.push(rValD);
+				}
+
+				// configure HeatMapAPI
+				myHeatmap.Init(400, 300);
+				// set at pixels for your map
+				myHeatmap.SetBoost(0.8);
+				myHeatmap.SetDecay(0);
+				// see documentation
+				myHeatmap.SetData(myData);
+				myHeatmap.SetProxyURL('http://localhost:8080/SignalMapWeb/proxy.php');
+
+				// set up Google map, pass in the heatmap function
+				var myLatlng = new google.maps.LatLng(38.5, -121.8);
+				var myOptions = {
+					zoom : 11,
+					center : myLatlng,
+					mapTypeId : google.maps.MapTypeId.ROADMAP
+				}
+				var map = new google.maps.Map(document.getElementById("map"), myOptions);
+				google.maps.event.addListener(map, 'idle', function(event) {
+					myHeatmap.AddOverlay(this, myHeatmap);
+				});
+			});
+		</script>
+
+	</head>
+
+	<body style="text-align: center" >
+
+		<h1>Heat Map</h1>
+
+		<div id="map" style="width: 900px; height: 500px; margin: auto">
+
+		</div>
+
+	</body>
+
+</html>
